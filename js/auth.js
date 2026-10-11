@@ -11,10 +11,10 @@ let isSuperAdmin = false;
 let loggedInScout = null;
 
 const defaultScouts = [
-    { name: "أحمد علي محمد", phone: "01012345678", confessor: "أبونا بولس", code: "S101", stage: "ابتدائي", points: 150, lastActive: "لم يسجل دخول" },
-    { name: "مينا يوسف ميخائيل", phone: "01123456789", confessor: "أبونا أنطونيوس", code: "S102", stage: "إعدادي", points: 200, lastActive: "لم يسجل دخول" },
-    { name: "عمر خالد محمود", phone: "01234567890", confessor: "أبونا يوحنا", code: "S103", stage: "ثانوي", points: 120, lastActive: "لم يسجل دخول" },
-    { name: "يوسف حسن مصطفى", phone: "01555555555", confessor: "أبونا بيشوي", code: "S104", stage: "جامعي", points: 180, lastActive: "لم يسجل دخول" }
+    { name: "أحمد علي محمد", phone: "01012345678", confessor: "أبونا بولس", code: "S101", stage: "ابتدائي", points: 150 },
+    { name: "مينا يوسف ميخائيل", phone: "01123456789", confessor: "أبونا أنطونيوس", code: "S102", stage: "إعدادي", points: 200 },
+    { name: "عمر خالد محمود", phone: "01234567890", confessor: "أبونا يوحنا", code: "S103", stage: "ثانوي", points: 120 },
+    { name: "يوسف حسن مصطفى", phone: "01555555555", confessor: "أبونا بيشوي", code: "S104", stage: "جامعي", points: 180 }
 ];
 
 let scoutsData = JSON.parse(localStorage.getItem('scoutsData')) || defaultScouts;
@@ -38,12 +38,9 @@ function login() {
 
     if (inputCode === SUPER_ADMIN_CODE) {
         isSuperAdmin = true;
-        let loginBox = document.getElementById('loginBox');
-        let adminPanel = document.getElementById('adminMainPanel');
-        let topLogout = document.getElementById('topLogoutBtn');
-        if (loginBox) loginBox.style.display = 'none';
-        if (adminPanel) adminPanel.style.display = 'block';
-        if (topLogout) topLogout.style.display = 'block';
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('adminMainPanel').style.display = 'block';
+        document.getElementById('topLogoutBtn').style.display = 'block';
         errorMsg.innerHTML = "";
         return;
     }
@@ -51,11 +48,9 @@ function login() {
     if (STAGE_CODES[inputCode]) {
         isSuperAdmin = false;
         let targetStage = STAGE_CODES[inputCode];
-        let loginBox = document.getElementById('loginBox');
-        let topLogout = document.getElementById('topLogoutBtn');
-        if (loginBox) loginBox.style.display = 'none';
+        document.getElementById('loginBox').style.display = 'none';
         openStageControl(targetStage);
-        if (topLogout) topLogout.style.display = 'block';
+        document.getElementById('topLogoutBtn').style.display = 'block';
         errorMsg.innerHTML = "";
         return;
     }
@@ -72,28 +67,14 @@ function login() {
     );
 
     if (foundScout) {
-        let now = new Date();
-        foundScout.lastActive = now.toLocaleDateString('ar-EG') + ' - ' + now.toLocaleTimeString('ar-EG');
-        saveData();
-
         loggedInScout = foundScout;
-        let loginBox = document.getElementById('loginBox');
-        let displayName = document.getElementById('displayName');
-        let displayStage = document.getElementById('displayStage');
-        let displayPoints = document.getElementById('displayPoints');
-        let profileDashboard = document.getElementById('profileDashboard');
-        let topLogout = document.getElementById('topLogoutBtn');
-
-        if (loginBox) loginBox.style.display = 'none';
-        if (displayName) displayName.innerText = foundScout.name;
-        if (displayStage) displayStage.innerText = foundScout.stage;
-        if (displayPoints) displayPoints.innerText = foundScout.points;
-        if (profileDashboard) profileDashboard.style.display = 'block';
-        if (topLogout) topLogout.style.display = 'block';
-        
-        if (typeof backToScoutMenu === 'function') {
-            backToScoutMenu();
-        }
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('displayName').innerText = foundScout.name;
+        document.getElementById('displayStage').innerText = foundScout.stage;
+        document.getElementById('displayPoints').innerText = foundScout.points;
+        document.getElementById('profileDashboard').style.display = 'block';
+        document.getElementById('topLogoutBtn').style.display = 'block';
+        backToScoutMenu();
         errorMsg.innerHTML = "";
     } else {
         errorMsg.innerHTML = "❌ البيانات غير صحيحة!";
@@ -101,96 +82,23 @@ function login() {
 }
 
 function showLogoutModal() {
-    let modal = document.getElementById('logoutModal');
-    if (modal) modal.style.display = 'flex';
+    document.getElementById('logoutModal').style.display = 'flex';
 }
 
 function closeLogoutModal() {
-    let modal = document.getElementById('logoutModal');
-    if (modal) modal.style.display = 'none';
+    document.getElementById('logoutModal').style.display = 'none';
 }
 
 function confirmLogout() {
     closeLogoutModal();
     loggedInScout = null;
     isSuperAdmin = false;
-
-    let elementsToHide = [
-        'profileDashboard', 
-        'adminMainPanel', 
-        'stageControlBox', 
-        'topLogoutBtn',
-        'publishModal',
-        'contentsModal'
-    ];
-
-    elementsToHide.forEach(id => {
-        let el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    });
-
-    let loginBox = document.getElementById('loginBox');
-    if (loginBox) loginBox.style.display = 'block';
-
-    let scoutNameInput = document.getElementById('scoutName');
-    if (scoutNameInput) scoutNameInput.value = "";
-
-    let scoutStageSelect = document.getElementById('scoutStage');
-    if (scoutStageSelect) scoutStageSelect.value = "";
-
-    let scoutCodeInput = document.getElementById('scoutCode');
-    if (scoutCodeInput) scoutCodeInput.value = "";
-}
-
-// دالة فتح نافذة النشر للمشرف (مضمونة هنا لمنع أي خطأ)
-function openPublishModal() {
-    let modal = document.getElementById('publishModal');
-    if (modal) modal.style.display = 'flex';
-}
-
-function closePublishModal() {
-    let modal = document.getElementById('publishModal');
-    if (modal) modal.style.display = 'none';
-}
-
-function publishNewContent() {
-    let titleElement = document.getElementById('contentTitle');
-    let urlElement = document.getElementById('contentUrl');
-    let targetElement = document.getElementById('contentTarget');
-
-    if (!titleElement || !urlElement || !targetElement) return;
-
-    let title = titleElement.value.trim();
-    let url = urlElement.value.trim();
-    let target = targetElement.value;
-
-    if (!title || !url) {
-        alert("⚠️ يرجى إدخال عنوان المحتوى ورابط الملف/الصورة!");
-        return;
-    }
-
-    let mediaContents = JSON.parse(localStorage.getItem('mediaContents')) || [];
-    mediaContents.push({
-        id: Date.now(),
-        title: title,
-        url: url,
-        targetStage: target
-    });
-
-    localStorage.setItem('mediaContents', JSON.stringify(mediaContents));
-    alert("✅ تم نشر المحتوى بنجاح!");
-    titleElement.value = "";
-    urlElement.value = "";
-    closePublishModal();
-}
-
-function backToScoutMenu() {
-    let mainSubMenu = document.getElementById('scoutMainMenu');
-    if (mainSubMenu) mainSubMenu.style.display = 'flex';
-
-    let pointsSec = document.getElementById('scoutPointsSection');
-    if (pointsSec) pointsSec.style.display = 'none';
-
-    let quizzesSec = document.getElementById('scoutQuizzesSection');
-    if (quizzesSec) quizzesSec.style.display = 'none';
+    document.getElementById('profileDashboard').style.display = 'none';
+    document.getElementById('adminMainPanel').style.display = 'none';
+    document.getElementById('stageControlBox').style.display = 'none';
+    document.getElementById('topLogoutBtn').style.display = 'none';
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('scoutName').value = "";
+    document.getElementById('scoutStage').value = "";
+    document.getElementById('scoutCode').value = "";
 }
