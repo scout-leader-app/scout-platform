@@ -103,17 +103,10 @@ function confirmLogout() {
     document.getElementById('scoutCode').value = "";
 }
 
-// عند نجاح تسجيل دخول الكشاف
-function onScoutLogin(scoutId) {
-    const now = new Date();
-    const formattedDateTime = now.toLocaleDateString('ar-EG') + ' - ' + now.toLocaleTimeString('ar-EG');
-    
-    // جلب بيانات الكشافين وتحديث الكشاف الحالي
-    let members = JSON.parse(localStorage.getItem('scout_members')) || [];
-    let memberIndex = members.findIndex(m => m.id === scoutId);
-    
-    if (memberIndex !== -1) {
-        members[memberIndex].lastActive = formattedDateTime;
-        localStorage.setItem('scout_members', JSON.stringify(members));
-    }
-}
+// عند إتمام تسجيل دخول الكشاف بنجاح والتحقق من كوده:
+let now = new Date();
+let loginTime = now.toLocaleDateString('ar-EG') + ' - ' + now.toLocaleTimeString('ar-EG');
+
+// حفظ وقت الدخول في بيانات الكشاف الحالي
+scout.lastActive = loginTime; // أو تحديثه داخل مصفوفة الكشافة وحفظه في localStorage
+localStorage.setItem('scoutsData', JSON.stringify(scoutsData)); // أو المفتاح المستخدم لتخزين بيانات الكشافة لديك
