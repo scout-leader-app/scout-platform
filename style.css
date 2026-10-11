@@ -1,0 +1,226 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 20px;
+    direction: rtl;
+    text-align: right;
+}
+
+h1 {
+    text-align: center;
+    color: #1b5e20;
+}
+
+/* الحاوية الرئيسية للبطاقات */
+.box-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    width: 90%;          /* تجعل الكارت يأخذ 90% من عرض الشاشات الصغيرة */
+    max-width: 750px;    /* زيادة الحد الأقصى للعرض ليكون واسعاً ومريحاً */
+    margin: 20px auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.input-field {
+    width: 90%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-blue { background-color: #0288d1; }
+.btn-purple { background-color: #6a1b9a; }
+.btn-teal { background-color: #00796b; }
+.btn-pink { background-color: #d81b60; }
+.btn-orange { background-color: #f57c00; }
+.btn-grey { background-color: #757575; }
+.btn-danger { background-color: #d32f2f; }
+
+.btn-full {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.admin-grid-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+/* الأقسام الفرعية داخل البطاقات */
+.sub-panel {
+    width: 100%;          /* استغلال كامل المساحة الداخلية */
+    box-sizing: border-box;
+    padding: 20px;
+    margin-top: 15px;
+    border-radius: 10px;
+}
+
+/* لتوسيع الجداول وتسهيل التصفح */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #2e7d32;
+    color: white;
+    padding: 8px;
+}
+
+td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+/* زر تسجيل الخروج العائم في أعلى اليمين */
+.logout-top-right {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* نافذة التأكيد في منتصف الشاشة */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-box {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.modal-btns {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+/* توسيع فريم دفتر الأعضاء فقط */
+.large-box {
+    max-width: 950px !important; /* عرض أوسع ومريح جداً للدفتر */
+    width: 95% !important;
+}
+
+/* تنسيق السكرول للجداول الكبيرة لضمان العرض المريح على الشاشات الصغيرة */
+.table-container {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.logout-top-right {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* اجعل الحاوية تعرض العناصر بشكل عمودي وبعرض كامل */
+#stageMainButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* اجعل الأزرار تأخذ عرض الصندوق بالكامل */
+#stageMainButtons .btn-primary {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+}
+
+#loginBox {
+    padding: 15px 25px !important; /* تقليل الفراغ العلوي والسفلي للمربع ليصبح أقصر */
+    margin-top: 10px !important;    /* تقليل المسافة من أعلى الشاشة إن وجدت */
+}
+
+#loginBox h3 {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important; /* تقليل المسافة تحت العنوان */
+}
+
+/* جعل قسم الترتيب يظهر كقسم رئيسي كامل يملأ الصندوق مثل بقية الأقسام */
+#leaderboardSection {
+    display: none;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    margin-top: 10px;
+}
+
+/* جعل قائمة اختيار النطاق تظهر كصندوق منبثق في منتصف الشاشة */
+#leaderboardMenuSelection {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 350px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    z-index: 1000;
+    text-align: center;
+}
+
+#globalQuizBox {
+    margin: 20px auto;
+    background-color: #e3f2fd;
+    text-align: right;
+    width: 500px;
+    max-width: 95%;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    padding: 20px;
+}
