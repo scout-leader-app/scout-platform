@@ -85,48 +85,6 @@ function hideAllAdminSections() {
     if (topLogout) topLogout.style.display = 'block';
 }
 
-function toggleLeaderboard() {
-    const leaderboardSection = document.getElementById('leaderboardSection');
-    if (leaderboardSection.style.display === 'none') {
-        showStageLeaderboard();
-    } else {
-        hideLeaderboard();
-    }
-}
-
-function showStageLeaderboard() {
-    const leaderboardSection = document.getElementById('leaderboardSection');
-    const tbody = document.getElementById('leaderboardBody');
-    
-    document.getElementById('stageMainButtons').style.display = 'none';
-    document.getElementById('stageFooterButtons').style.display = 'none';
-
-    tbody.innerHTML = "";
-
-    let stageScouts = scoutsData.filter(s => s.stage === currentActiveStage);
-    let sortedScouts = [...stageScouts].sort((a, b) => b.points - a.points);
-
-    if (sortedScouts.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align: center;">لا يوجد كشافة في هذا القطاع حالياً</td></tr>`;
-    } else {
-        sortedScouts.forEach((scout, index) => {
-            let row = `<tr>
-                <td><b>${index + 1}</b></td>
-                <td>${scout.name}</td>
-                <td>⭐ ${scout.points}</td>
-            </tr>`;
-            tbody.innerHTML += row;
-        });
-    }
-    leaderboardSection.style.display = 'block';
-}
-
-function hideLeaderboard() {
-    document.getElementById('leaderboardSection').style.display = 'none';
-    document.getElementById('stageMainButtons').style.display = 'flex';
-    document.getElementById('stageFooterButtons').style.display = 'block';
-}
-
 function addNewScout() {
     let name = document.getElementById('newScoutName').value.trim();
     let phone = document.getElementById('newScoutPhone').value.trim();
@@ -134,7 +92,7 @@ function addNewScout() {
     let code = document.getElementById('newScoutCode').value.trim().toUpperCase();
 
     if (name === "" || phone === "" || confessor === "" || code === "") {
-        alert("⚠️ يرجى إدخال جميع البيانات (الاسم، الهاتف، أب الاعتراف، والكود)!");
+        alert("⚠️ يرجى إدخال جميع البيانات!");
         return;
     }
 
@@ -209,7 +167,6 @@ function populateScoutSelectByStage(stageName) {
     select.innerHTML = "";
 
     let stageScouts = scoutsData.filter(s => s.stage === stageName);
-
     if (stageScouts.length === 0) {
         select.innerHTML = "<option>لا يوجد كشافة في هذا القطاع</option>";
         return;
@@ -241,11 +198,9 @@ function modifyPoints(type) {
 
     if (type === 'add') {
         scoutsData[selectedIndex].points += pointsInput;
-        alert(`تمت إضافة ${pointsInput} نقطة إلى ${scoutsData[selectedIndex].name} بنجاح!`);
     } else if (type === 'deduct') {
         scoutsData[selectedIndex].points -= pointsInput;
         if (scoutsData[selectedIndex].points < 0) scoutsData[selectedIndex].points = 0;
-        alert(`تم خصم ${pointsInput} نقطة من ${scoutsData[selectedIndex].name} بنجاح!`);
     }
 
     saveData();
@@ -255,78 +210,12 @@ function modifyPoints(type) {
 function backToAdminMain() {
     document.getElementById('stageControlBox').style.display = 'none';
     document.getElementById('adminMainPanel').style.display = 'block';
-    
     let topLogoutBtn = document.getElementById('topLogoutBtn');
     if (topLogoutBtn) topLogoutBtn.style.display = 'block';
 }
 
-function openEditScoutModal(index) {
-    let scout = scoutsData[index];
-    if (!scout) return;
-
-    document.getElementById('editScoutIndex').value = index;
-    document.getElementById('editScoutName').value = scout.name;
-    document.getElementById('editScoutPhone').value = scout.phone || "";
-    document.getElementById('editScoutConfessor').value = scout.confessor || "";
-    document.getElementById('editScoutCode').value = scout.code;
-
-    document.getElementById('editScoutModal').style.display = 'flex';
-}
-
-function closeEditScoutModal() {
-    document.getElementById('editScoutModal').style.display = 'none';
-}
-
-function saveEditedScout() {
-    let index = document.getElementById('editScoutIndex').value;
-    let name = document.getElementById('editScoutName').value.trim();
-    let phone = document.getElementById('editScoutPhone').value.trim();
-    let confessor = document.getElementById('editScoutConfessor').value.trim();
-    let code = document.getElementById('editScoutCode').value.trim().toUpperCase();
-
-    if (name === "" || code === "") {
-        alert("⚠️ اسم الكشاف والكود حقول إجبارية!");
-        return;
-    }
-
-    scoutsData[index].name = name;
-    scoutsData[index].phone = phone;
-    scoutsData[index].confessor = confessor;
-    scoutsData[index].code = code;
-
-    saveData();
-    closeEditScoutModal();
-    renderMembersList(currentActiveStage);
-    populateScoutSelectByStage(currentActiveStage);
-    alert("✅ تم تعديل بيانات الكشاف بنجاح!");
-}
-
-function enableBottomEditMode() {
-    let select = document.getElementById('scoutSelect');
-    if (select && select.value !== "") {
-        openEditScoutModal(select.value);
-    } else {
-        alert("⚠️ يرجى اختيار كشاف أولاً من القائمة لتعديله!");
-    }
-}
-
-function enableBottomDeleteMode() {
-    let select = document.getElementById('scoutSelect');
-    if (select && select.value !== "") {
-        let scoutIndex = select.value;
-        let scout = scoutsData[scoutIndex];
-        if (confirm(`⚠️ تنبيه: هل أنت متأكد من رغبتك في حذف الكشاف "${scout.name}" نهائياً؟`)) {
-            deleteScout(scoutIndex);
-        }
-    } else {
-        alert("⚠️ يرجى اختيار كشاف أولاً من القائمة لحذفه!");
-    }
-}
-
-// دالة عرض توقيت آخر نشاط للكشاف
 function viewScoutActivity(scoutCode) {
     let scout = scoutsData.find(s => s.code === scoutCode);
-    
     if (scout && scout.lastActive) {
         alert(`الكشاف: ${scout.name}\nآخر فترة عمل / نشاط: ${scout.lastActive}`);
     } else {
@@ -334,43 +223,55 @@ function viewScoutActivity(scoutCode) {
     }
 }
 
-// مصفوفة حفظ الملفات والمحتويات المتاحة للتنزيل
-let mediaContents = JSON.parse(localStorage.getItem('mediaContents')) || [];
+// ================= دوال النشر والتنزيل المستقلة =================
 
-function saveMediaContents() {
-    localStorage.setItem('mediaContents', JSON.stringify(mediaContents));
+function openPublishModal() {
+    let modal = document.getElementById('publishModal');
+    if (modal) modal.style.display = 'flex';
 }
 
-// دالة المشرف لنشر محتوى جديد
+function closePublishModal() {
+    let modal = document.getElementById('publishModal');
+    if (modal) modal.style.display = 'none';
+}
+
 function publishNewContent() {
-    let title = document.getElementById('contentTitle').value.trim();
-    let url = document.getElementById('contentUrl').value.trim();
-    let target = document.getElementById('contentTarget').value; // "ALL" أو اسم القطاع الحالي
+    let titleElement = document.getElementById('contentTitle');
+    let urlElement = document.getElementById('contentUrl');
+    let targetElement = document.getElementById('contentTarget');
+
+    if (!titleElement || !urlElement || !targetElement) return;
+
+    let title = titleElement.value.trim();
+    let url = urlElement.value.trim();
+    let target = targetElement.value;
 
     if (!title || !url) {
         alert("⚠️ يرجى إدخال عنوان المحتوى ورابط الملف/الصورة!");
         return;
     }
 
+    let mediaContents = JSON.parse(localStorage.getItem('mediaContents')) || [];
     mediaContents.push({
         id: Date.now(),
         title: title,
         url: url,
-        targetStage: target // "ALL" تعني لكل القطاعات
+        targetStage: target
     });
 
-    saveMediaContents();
+    localStorage.setItem('mediaContents', JSON.stringify(mediaContents));
     alert("✅ تم نشر المحتوى بنجاح!");
-    document.getElementById('contentTitle').value = "";
-    document.getElementById('contentUrl').value = "";
+    titleElement.value = "";
+    urlElement.value = "";
+    closePublishModal();
 }
 
-// دالة الكشاف لفتح قائمة المحتويات والملفات
 function openContentsModal() {
     const listContainer = document.getElementById('contentsList');
+    if (!listContainer) return;
     listContainer.innerHTML = "";
 
-    // فلترة الملفات الخاصة بقطاع الكشاف الحالي + الملفات الموجهة لكل القطاعات
+    let mediaContents = JSON.parse(localStorage.getItem('mediaContents')) || [];
     let userStage = loggedInScout ? loggedInScout.stage : "";
     let availableFiles = mediaContents.filter(item => item.targetStage === "ALL" || item.targetStage === userStage);
 
@@ -394,5 +295,6 @@ function openContentsModal() {
 }
 
 function closeContentsModal() {
-    document.getElementById('contentsModal').style.display = 'none';
+    let modal = document.getElementById('contentsModal');
+    if (modal) modal.style.display = 'none';
 }
