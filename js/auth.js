@@ -183,3 +183,14 @@ function publishNewContent() {
     urlElement.value = "";
     closePublishModal();
 }
+
+function backToScoutMenu() {
+    let mainSubMenu = document.getElementById('scoutMainMenu');
+    if (mainSubMenu) mainSubMenu.style.display = 'flex';
+
+    let pointsSec = document.getElementById('scoutPointsSection');
+    if (pointsSec) pointsSec.style.display = 'none';
+
+    let quizzesSec = document.getElementById('scoutQuizzesSection');
+    if (quizzesSec) quizzesSec.style.display = 'none';
+}
