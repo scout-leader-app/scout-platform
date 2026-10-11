@@ -74,7 +74,11 @@ function login() {
         document.getElementById('displayPoints').innerText = foundScout.points;
         document.getElementById('profileDashboard').style.display = 'block';
         document.getElementById('topLogoutBtn').style.display = 'block';
-        backToScoutMenu();
+        
+        // تأمين استدعاء الدالة لمنع أي توقف فجائي
+        if (typeof backToScoutMenu === 'function') {
+            backToScoutMenu();
+        }
         errorMsg.innerHTML = "";
     } else {
         errorMsg.innerHTML = "❌ البيانات غير صحيحة!";
@@ -101,4 +105,16 @@ function confirmLogout() {
     document.getElementById('scoutName').value = "";
     document.getElementById('scoutStage').value = "";
     document.getElementById('scoutCode').value = "";
+}
+
+// دالة أمان إضافية لضمان عمل قائمة الكشاف بسلاسة
+function backToScoutMenu() {
+    let mainSubMenu = document.getElementById('scoutMainMenu');
+    if (mainSubMenu) mainSubMenu.style.display = 'flex';
+
+    let pointsSec = document.getElementById('scoutPointsSection');
+    if (pointsSec) pointsSec.style.display = 'none';
+
+    let quizzesSec = document.getElementById('scoutQuizzesSection');
+    if (quizzesSec) quizzesSec.style.display = 'none';
 }
