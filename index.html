@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>منصة الكشافة الرقمية</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- إعدادات تطبيق الويب التقدمي (PWA) للعمل على الجوال والكمبيوتر -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0288d1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,10 +20,12 @@
     <!-- 1. واجهة تسجيل الدخول -->
     <div id="loginBox" class="box-card" style="width: 320px;">
         <h3>تسجيل الدخول</h3>
+        
         <div>
             <label>الاسم الثلاثي:</label><br>
             <input type="text" id="scoutName" class="input-field" placeholder="أدخل اسمك ">
         </div>
+
         <div>
             <label>المرحلة الدراسية:</label><br>
             <select id="scoutStage" class="input-field" style="width: 95%;">
@@ -32,10 +36,12 @@
                 <option value="جامعي">جامعي</option>
             </select>
         </div>
+
         <div>
             <label>الكود الشخصي:</label><br>
             <input type="text" id="scoutCode" class="input-field" placeholder="كود الكشاف أو كود المشرف">
         </div>
+
         <button onclick="login()" class="btn-primary">تسجيل الدخول</button>
         <p id="errorMsg" style="color: red;"></p>
     </div>
@@ -48,7 +54,6 @@
         <div id="scoutMainMenu" style="margin: 20px 0; display: flex; flex-direction: column; gap: 12px; align-items: center;">
             <button onclick="showScoutSection('points')" class="btn-primary btn-full">📊 معرفة النقاط</button>
             <button onclick="openQuizMenu()" class="btn-primary btn-blue btn-full">🧩 المسابقات</button>
-            <button onclick="openContentsModal()" class="btn-primary" style="background:#1b5e20; width: 100%;">📥 تنزيل المحتويات والملفات</button>
         </div>
 
         <div id="scoutPointsSection" class="sub-panel" style="display: none; background-color: #e8f5e9;">
@@ -70,11 +75,13 @@
     <!-- 3. الشاشة الرئيسية للقائد العام (الليدر) -->
     <div id="adminMainPanel" class="box-card" style="display: none; text-align: center; background-color: #e3f2fd;">
         <h2>👑 لوحة القائد العام (الليدر)</h2>
+        
         <button onclick="toggleGlobalQuizForm()" class="btn-primary btn-purple btn-full" style="margin-bottom: 10px;">➕ إضافة مسابقة عامة</button>
-        <button onclick="showQuizTrackingPanel()" class="btn-primary btn-full" style="background-color: #0288d1; margin-bottom: 10px;">📊 متابعة حلول المسابقات</button>
-        <button onclick="openPublishModal()" class="btn-primary" style="background:#2e7d32; width: 100%; margin-bottom: 15px;">📢 نشر صور ومحتويات للتنزيل</button>
+        
+        <button onclick="showQuizTrackingPanel()" class="btn-primary btn-full" style="background-color: #0288d1; margin-bottom: 15px;">📊 متابعة حلول المسابقات</button>
 
         <p>اختر لوحة التحكم الخاصة بالقطاع:</p>
+
         <div style="display: flex; flex-direction: column; gap: 10px;">
             <button onclick="openStageControl('ابتدائي')" class="btn-primary btn-blue">قطاع الابتدائي 🎒</button>
             <button onclick="openStageControl('إعدادي')" class="btn-primary btn-blue">قطاع الإعدادي 📘</button>
@@ -83,68 +90,204 @@
         </div>
     </div>
 
-    <!-- 4. لوحة تحكم القطاع (تظهر عند الضغط على أي قطاع) -->
-    <div id="stageControlBox" class="box-card" style="display: none; width: 90%; max-width: 800px; text-align: right; background-color: #f9f9f9;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <button id="backBtn" onclick="backToAdminMain()" class="btn-primary btn-grey" style="display: none;">🔙 رجوع للوحة الليدر</button>
-            <h2 id="stageTitle" style="margin: 0; color: #0288d1;">لوحة تحكم القطاع</h2>
+    <!-- قائمة إضافة مسابقة عامة المتكاملة -->
+    <div id="globalQuizBox" class="box-card" style="display: none; background-color: #e3f2fd; text-align: right; width: 450px; max-width: 95%;">
+        <h3 style="text-align: center; color: #1565c0;">➕ إضافة مسابقة عامة جديدة</h3>
+        
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold; color: #333;">عنوان المسابقة العامة:</label><br>
+            <input type="text" id="globalQuizTitle" class="input-field" placeholder="أدخل اسم المسابقة..." style="width: 100%; margin-top: 5px;">
         </div>
 
-        <!-- الأزرار الرئيسية داخل القطاع -->
-        <div id="stageMainButtons" style="display: flex; flex-direction: column; gap: 10px;">
-            <button onclick="showAdminSection('membersList')" class="btn-primary btn-blue">👥 عرض وتعديل الكشافة في القطاع</button>
-            <button onclick="showAdminSection('addMember')" class="btn-primary" style="background-color: #2e7d32;">➕ إضافة كشاف جديد</button>
-            <button onclick="showAdminSection('addPoints')" class="btn-primary" style="background-color: #f57c00;">⭐ إضافة / خصم نقاط</button>
+        <div id="globalQuestionsContainer"></div>
+        <button onclick="addGlobalQuestionField()" class="btn-primary btn-teal" style="margin-bottom: 15px; width: 100%;">➕ إضافة سؤال آخر</button>
+        
+        <div style="display: flex; gap: 10px;">
+            <button onclick="saveGlobalQuiz()" class="btn-primary btn-purple" style="flex: 1;">نشر المسابقة العامة</button>
+            <button onclick="toggleGlobalQuizForm()" class="btn-primary btn-grey" style="flex: 1;">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- 4. لوحة تحكم القطاع -->
+    <div id="stageControlBox" class="box-card" style="display: none; background-color: #f1f8e9;">
+        <h3 id="stageTitle" style="text-align: center;"></h3>
+        
+        <div id="stageMainButtons" class="admin-grid-btns">
+            <button onclick="showAdminSection('addMember')" class="btn-primary btn-teal">👤 إضافة عضو</button>
+            <button onclick="openQuizManagementMenu()" class="btn-primary btn-purple">🧩 إدارة المسابقات</button>
+            <button onclick="showAdminSection('addPoints')" class="btn-primary">⭐ إضافة وخصم نقاط</button>
+            <button onclick="showAdminSection('membersList')" class="btn-primary btn-pink">📋 قائمة الأعضاء وحذفهم</button>
         </div>
 
-        <!-- قسم عرض قائمة الكشافة -->
-        <div id="membersListSec" style="display: none; margin-top: 15px;">
-            <h3>قائمة كشافة القطاع</h3>
-            <table border="1" style="width: 100%; border-collapse: collapse; text-align: center; margin-top: 10px;">
+        <!-- 1. قسم إضافة عضو -->
+        <div id="addMemberSec" class="sub-panel" style="display: none;">
+            <h4>إضافة كشاف جديد للقطاع</h4>
+            <input type="text" id="newScoutName" class="input-field" placeholder="الاسم الثلاثي..."><br>
+            <input type="text" id="newScoutPhone" class="input-field" placeholder="رقم الهاتف..."><br>
+            <input type="text" id="newScoutConfessor" class="input-field" placeholder="أب الاعتراف..."><br>
+            <input type="text" id="newScoutCode" class="input-field" placeholder="الكود الشخصي (مثال: S105)..."><br>
+            <button onclick="addNewScout()" class="btn-primary btn-teal">حفظ الكشاف</button>
+            <br><br>
+            <button onclick="hideAllAdminSections()" class="btn-primary btn-grey">🔙 رجوع</button>
+        </div>
+
+        <!-- 2. قسم إضافة مسابقة -->
+        <div id="addQuizSec" class="sub-panel" style="display: none;">
+            <div id="questionsContainer"></div>
+            <button onclick="addQuestionField()" class="btn-primary btn-teal" style="margin-bottom: 15px; cursor: pointer;">➕ إضافة سؤال آخر</button>
+            <br>
+            <button onclick="saveStageQuiz()" class="btn-primary btn-purple" style="cursor: pointer;">نشر المسابقة كاملة</button>
+        </div>
+
+        <!-- قسم حذف المسابقات -->
+        <div id="deleteQuizSec" class="sub-panel" style="display: none;"></div>
+
+        <!-- 3. قسم إضافة وخصم النقاط -->
+        <div id="addPointsSec" class="sub-panel" style="display: none;">
+            <h4>إضافة أو خصم نقاط</h4>
+            <label>اختر الكشاف:</label><br>
+            <select id="scoutSelect" class="input-field"></select><br>
+            <input type="number" id="addPointsInput" class="input-field" placeholder="عدد النقاط..."><br>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="modifyPoints('add')" class="btn-primary">إضافة نقاط ➕</button>
+                <button onclick="modifyPoints('deduct')" class="btn-primary btn-danger">خصم نقاط ➖</button>
+            </div>
+            <br>
+            <button onclick="hideAllAdminSections()" class="btn-primary btn-grey">🔙 رجوع</button>
+        </div>
+
+        <!-- 4. قسم عرض الأعضاء -->
+        <div id="membersListSec" class="sub-panel table-container" style="display: none;">
+            <h4>📋 دفتر سجل الأعضاء المسجلين</h4>
+            <table style="width: 100%; margin-top: 10px;">
                 <thead>
-                    <tr style="background-color: #0288d1; color: white;">
+                    <tr>
                         <th>م</th>
-                        <th>الاسم</th>
-                        <th>الهاتف</th>
+                        <th>الاسم الثلاثي</th>
+                        <th>رقم الهاتف</th>
                         <th>أب الاعتراف</th>
                         <th>الكود</th>
-                        <th>النشاط</th>
+                        <th>إجراء</th>
                     </tr>
                 </thead>
                 <tbody id="membersTableBody"></tbody>
             </table>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; text-align: center;">
+                <p style="margin-bottom: 10px; font-weight: bold; color: #333;">إدارة الأعضاء المسجلين:</p>
+                <div style="display: flex; justify-content: space-around; gap: 10px;">
+                    <button onclick="enableBottomEditMode()" class="btn-primary" style="background-color: #ff9800; flex: 1;">تعديل بيانات عضو ✏️</button>
+                    <button onclick="enableBottomDeleteMode()" class="btn-primary btn-danger" style="flex: 1;">حذف عضو ❌</button>
+                </div>
+            </div>
+
             <br>
-            <button onclick="hideAllAdminSections()" class="btn-primary btn-grey">🔙 رجوع لقائمة القطاع</button>
+            <button onclick="hideAllAdminSections()" class="btn-primary btn-grey">🔙 رجوع</button>
         </div>
 
-        <!-- قسم إضافة كشاف جديد -->
-        <div id="addMemberSec" style="display: none; margin-top: 15px;">
-            <h3>إضافة كشاف جديد للقطاع</h3>
-            <label>الاسم الثلاثي:</label><br>
-            <input type="text" id="newScoutName" class="input-field" placeholder="اسم الكشاف"><br><br>
-            <label>رقم الهاتف:</label><br>
-            <input type="text" id="newScoutPhone" class="input-field" placeholder="رقم الهاتف"><br><br>
-            <label>أب الاعتراف:</label><br>
-            <input type="text" id="newScoutConfessor" class="input-field" placeholder="اسم أب الاعتراف"><br><br>
-            <label>الكود الشخصي:</label><br>
-            <input type="text" id="newScoutCode" class="input-field" placeholder="مثل S105"><br><br>
-            <button onclick="addNewScout()" class="btn-primary" style="background-color: #2e7d32;">حفظ وإضافة</button>
-            <button onclick="hideAllAdminSections()" class="btn-primary btn-grey">إلغاء</button>
-        </div>
-
-        <!-- قسم إضافة أو خصم النقاط -->
-        <div id="addPointsSec" style="display: none; margin-top: 15px;">
-            <h3>إدارة نقاط كشافة القطاع</h3>
-            <label>اختر الكشاف:</label><br>
-            <select id="scoutSelect" class="input-field" style="width: 100%;"></select><br><br>
-            <label>عدد النقاط:</label><br>
-            <input type="number" id="addPointsInput" class="input-field" placeholder="عدد النقاط"><br><br>
-            <button onclick="modifyPoints('add')" class="btn-primary" style="background-color: #2e7d32;">➕ إضافة نقاط</button>
-            <button onclick="modifyPoints('deduct')" class="btn-primary btn-danger">➖ خصم نقاط</button>
+       <div id="stageFooterButtons" style="text-align: center; margin-top: 15px;">
+            <button onclick="toggleLeaderboardMenu()" class="btn-primary btn-orange">📊 معرفة نقاط الأعضاء</button>
             <br><br>
-            <button onclick="hideAllAdminSections()" class="btn-primary btn-grey">🔙 رجوع لقائمة القطاع</button>
+            <button id="backBtn" onclick="backToAdminMain()" class="btn-primary btn-grey">🔙 الرجوع للقائمة الرئيسية</button>
+       </div>
+
+       <div id="leaderboardMenuSelection" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 350px; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 1000; text-align: center;">
+            <p style="margin-bottom: 15px; font-weight: bold; color: #333;">اختر نطاق عرض النقاط:</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button id="globalLeaderboardBtn" onclick="showGlobalLeaderboard()" class="btn-primary btn-purple" style="display: none; width: 100%;">🌐 النقاط العامة لجميع القطاعات</button>
+                <button onclick="showStageLeaderboard()" class="btn-primary btn-blue" style="width: 100%;">📍 نقاط القطاع الحالي فقط</button>
+                <button onclick="toggleLeaderboardMenu()" class="btn-primary btn-grey" style="width: 100%; margin-top: 5px;">❌ إغلاق</button>
+            </div>
+       </div>
+
+       <div id="leaderboardSection" style="display: none; margin-top: 20px;">
+            <hr>
+            <h4 id="leaderboardTitle" style="text-align: center;">🏆 جدول الترتيب 🏆</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>الترتيب</th>
+                        <th>الاسم</th>
+                        <th>القطاع</th>
+                        <th>النقاط</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody"></tbody>
+            </table>
+            <br>
+            <button onclick="hideLeaderboard()" class="btn-primary btn-grey">🔙 إخفاء الترتيب</button>
+       </div>
+    </div>
+
+    <!-- نافذة خيارات المسابقات الجديدة في منتصف الشاشة -->
+    <div id="quizMenuModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
+        <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; width: 300px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+            <h3 style="margin-top: 0; color: #333;">خيارات المسابقات</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                <button onclick="selectSolveQuiz()" class="btn-primary" style="padding: 10px; cursor: pointer;">حل المسابقة</button>
+                <button onclick="selectQuizResults()" style="padding: 10px; cursor: pointer; background: #4CAF50; color: white; border: none; border-radius: 5px;">نتائج حل المسابقة</button>
+            </div>
+            <button onclick="closeQuizMenu()" style="margin-top: 15px; background: #ff4d4d; color: white; border: none; padding: 6px 15px; border-radius: 5px; cursor: pointer;">إغلاق</button>
         </div>
     </div>
+
+    <!-- النافذة المنبثقة لتسجيل الخروج -->
+    <div id="logoutModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <h3>تسجيل الخروج</h3>
+            <p>هل أنت تأكد من تسجيل الخروج؟</p>
+            <div class="modal-btns">
+                <button onclick="confirmLogout()" class="btn-primary btn-danger">نعم، خروج</button>
+                <button onclick="closeLogoutModal()" class="btn-primary btn-grey">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة التسليم النهائي للمسابقة -->
+    <div id="quizConfirmModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box" style="text-align: center;">
+            <h3 style="color: #d32f2f;">⚠️ تنبيه هام جداً</h3>
+            <p>بمجرد الضغط على موافق، لن تتمكن من تعديل الإجابات مرة أخرى وترشيحها للتقييم. هل أنت متأكد من رغبتك في التسليم؟</p>
+            <div class="modal-btns" style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                <button id="confirmYesBtn" class="btn-primary btn-danger">نعم، تسليم نهائي</button>
+                <button onclick="closeQuizConfirmModal()" class="btn-primary btn-grey">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تعديل بيانات الكشاف -->
+    <div id="editScoutModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
+        <div style="background: white; padding: 20px; border-radius: 8px; width: 350px; text-align: right; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <h3 style="color: #0288d1; margin-top: 0;">تعديل بيانات الكشاف</h3>
+            <input type="hidden" id="editScoutIndex">
+            
+            <label>الاسم الثلاثي:</label>
+            <input type="text" id="editScoutName" class="input-field" style="width: 100%; margin-bottom: 10px;">
+            
+            <label>رقم الهاتف:</label>
+            <input type="text" id="editScoutPhone" class="input-field" style="width: 100%; margin-bottom: 10px;">
+            
+            <label>أب الاعتراف:</label>
+            <input type="text" id="editScoutConfessor" class="input-field" style="width: 100%; margin-bottom: 10px;">
+            
+            <label>الكود:</label>
+            <input type="text" id="editScoutCode" class="input-field" style="width: 100%; margin-bottom: 15px;">
+            
+            <div style="display: flex; justify-content: space-between;">
+                <button onclick="saveEditedScout()" class="btn-primary" style="background-color: #4caf50; width: 48%;">حفظ التعديلات</button>
+                <button onclick="closeEditScoutModal()" class="btn-primary btn-grey" style="width: 48%;">إلغاء</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- تشغيل ملف Service Worker لتفعيل خاصية تطبيق الويب (PWA) -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(() => console.log('Service Worker Registered Successfully'))
+          .catch((err) => console.log('Service Worker Failed', err));
+      }
+    </script>
 
     <!-- نافذة نشر المحتويات للمشرف العام -->
     <div id="publishModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
@@ -173,25 +316,13 @@
         <h2>📦 قائمة المحتويات والملفات المتاحة للتنزيل</h2>
         <div id="contentsList" style="width:90%; max-width:600px; margin-top:20px; display:flex; flex-direction:column; gap:15px;"></div>
     </div>
-
-    <!-- نافذة تأكيد تسجيل الخروج -->
-    <div id="logoutModal" class="modal-overlay" style="display: none;">
-        <div class="modal-box">
-            <h3>تسجيل الخروج</h3>
-            <p>هل أنت تأكد من تسجيل الخروج؟</p>
-            <div class="modal-btns">
-                <button onclick="confirmLogout()" class="btn-primary btn-danger">نعم، خروج</button>
-                <button onclick="closeLogoutModal()" class="btn-primary btn-grey">إلغاء</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="js/auth.js"></script>
-    <script src="js/members.js"></script>
-    <script src="js/quizzes.js"></script>
-    <script src="js/admin-quizzes.js"></script>
-    <script src="js/leaderboard.js"></script>
-    <script src="js/global-quiz-builder.js"></script>
+    
+    <script src="js/auth.js" defer></script>
+    <script src="js/quizzes.js" defer></script>
+    <script src="js/members.js" defer></script>
+    <script src="js/admin-quizzes.js" defer></script>
+    <script src="js/leaderboard.js" defer></script>
+    <script src="js/global-quiz-builder.js" defer></script>
     <script src="js/quiz-tracker.js"></script>
 
 </body>
