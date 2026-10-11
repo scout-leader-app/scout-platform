@@ -11,10 +11,10 @@ let isSuperAdmin = false;
 let loggedInScout = null;
 
 const defaultScouts = [
-    { name: "أحمد علي محمد", phone: "01012345678", confessor: "أبونا بولس", code: "S101", stage: "ابتدائي", points: 150 },
-    { name: "مينا يوسف ميخائيل", phone: "01123456789", confessor: "أبونا أنطونيوس", code: "S102", stage: "إعدادي", points: 200 },
-    { name: "عمر خالد محمود", phone: "01234567890", confessor: "أبونا يوحنا", code: "S103", stage: "ثانوي", points: 120 },
-    { name: "يوسف حسن مصطفى", phone: "01555555555", confessor: "أبونا بيشوي", code: "S104", stage: "جامعي", points: 180 }
+    { name: "أحمد علي محمد", phone: "01012345678", confessor: "أبونا بولس", code: "S101", stage: "ابتدائي", points: 150, lastActive: "لم يسجل دخول" },
+    { name: "مينا يوسف ميخائيل", phone: "01123456789", confessor: "أبونا أنطونيوس", code: "S102", stage: "إعدادي", points: 200, lastActive: "لم يسجل دخول" },
+    { name: "عمر خالد محمود", phone: "01234567890", confessor: "أبونا يوحنا", code: "S103", stage: "ثانوي", points: 120, lastActive: "لم يسجل دخول" },
+    { name: "يوسف حسن مصطفى", phone: "01555555555", confessor: "أبونا بيشوي", code: "S104", stage: "جامعي", points: 180, lastActive: "لم يسجل دخول" }
 ];
 
 let scoutsData = JSON.parse(localStorage.getItem('scoutsData')) || defaultScouts;
@@ -67,6 +67,11 @@ function login() {
     );
 
     if (foundScout) {
+        // تسجيل وتحديث وقت آخر نشاط للكشاف
+        let now = new Date();
+        foundScout.lastActive = now.toLocaleDateString('ar-EG') + ' - ' + now.toLocaleTimeString('ar-EG');
+        saveData(); // حفظ التعديل في التخزين المحلي
+
         loggedInScout = foundScout;
         document.getElementById('loginBox').style.display = 'none';
         document.getElementById('displayName').innerText = foundScout.name;
@@ -102,11 +107,3 @@ function confirmLogout() {
     document.getElementById('scoutStage').value = "";
     document.getElementById('scoutCode').value = "";
 }
-
-// عند إتمام تسجيل دخول الكشاف بنجاح والتحقق من كوده:
-let now = new Date();
-let loginTime = now.toLocaleDateString('ar-EG') + ' - ' + now.toLocaleTimeString('ar-EG');
-
-// حفظ وقت الدخول في بيانات الكشاف الحالي
-scout.lastActive = loginTime; // أو تحديثه داخل مصفوفة الكشافة وحفظه في localStorage
-localStorage.setItem('scoutsData', JSON.stringify(scoutsData)); // أو المفتاح المستخدم لتخزين بيانات الكشافة لديك
