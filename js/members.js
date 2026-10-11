@@ -150,7 +150,8 @@ function addNewScout() {
         confessor: confessor, 
         code: code, 
         stage: currentActiveStage, 
-        points: 0 
+        points: 0,
+        lastActive: 'لم يسجل دخول بعد'
     });
     
     saveData();
@@ -191,13 +192,14 @@ function renderMembersList(stageName) {
                 <td>${scout.phone || 'غير مسجل'}</td>
                 <td>${scout.confessor || 'غير مسجل'}</td>
                 <td><code>${scout.code}</code></td>
+                <td><button onclick="viewScoutActivity('${scout.code}')" class="btn-activity" style="padding: 5px 10px; cursor: pointer;">سجل النشاط</button></td>
             </tr>`;
             tbody.innerHTML += row;
         }
     });
 
     if (count === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">لا يوجد أعضاء مسجلين في هذا القطاع حالياً.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center;">لا يوجد أعضاء مسجلين في هذا القطاع حالياً.</td></tr>`;
     }
 }
 
@@ -321,17 +323,12 @@ function enableBottomDeleteMode() {
     }
 }
 
-// 1. إضافة الزر بجانب بيانات كل عضو في الجدول أو القائمة:
-// ضع هذا السطر داخل حلقة التكرار (renderMembers / loop) بجانب اسم الكشاف:
-`<button onclick="viewScoutActivity('${member.id}')" class="btn-activity">سجل النشاط</button>`
-
-// 2. إضافة دالة عرض التوقيت والتاريخ عند ضغط المشرف:
-function viewScoutActivity(scoutId) {
-    let members = JSON.parse(localStorage.getItem('scout_members')) || [];
-    let scout = members.find(m => m.id === scoutId);
+// دالة عرض توقيت آخر نشاط للكشاف
+function viewScoutActivity(scoutCode) {
+    let scout = scoutsData.find(s => s.code === scoutCode);
     
     if (scout && scout.lastActive) {
-        alert(`الكشاف: ${scout.name}\nآخر فترة عمل: ${scout.lastActive}`);
+        alert(`الكشاف: ${scout.name}\nآخر فترة عمل / نشاط: ${scout.lastActive}`);
     } else {
         alert(`لم يتم تسجيل أي نشاط سابق لهذا الكشاف حتى الآن.`);
     }
