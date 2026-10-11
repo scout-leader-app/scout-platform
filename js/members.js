@@ -1,20 +1,28 @@
 function openStageControl(stageName) {
     currentActiveStage = stageName;
-    document.getElementById('adminMainPanel').style.display = 'none';
-    document.getElementById('stageControlBox').style.display = 'block';
-    document.getElementById('stageTitle').innerText = "لوحة تحكم قطاع: " + stageName;
+    
+    let adminPanel = document.getElementById('adminMainPanel');
+    if (adminPanel) adminPanel.style.display = 'none';
+
+    let stageBox = document.getElementById('stageControlBox');
+    if (stageBox) stageBox.style.display = 'block';
+
+    let stageTitle = document.getElementById('stageTitle');
+    if (stageTitle) stageTitle.innerText = "لوحة تحكم قطاع: " + stageName;
     
     hideAllAdminSections();
-    document.getElementById('leaderboardSection').style.display = 'none';
+    
+    let leaderboard = document.getElementById('leaderboardSection');
+    if (leaderboard) leaderboard.style.display = 'none';
 
     let backBtn = document.getElementById('backBtn');
     let topLogoutBtn = document.getElementById('topLogoutBtn');
 
     if (isSuperAdmin) {
-        backBtn.style.display = 'inline-block';
+        if (backBtn) backBtn.style.display = 'inline-block';
         if (topLogoutBtn) topLogoutBtn.style.display = 'block';
     } else {
-        backBtn.style.display = 'none';
+        if (backBtn) backBtn.style.display = 'none';
         if (topLogoutBtn) topLogoutBtn.style.display = 'block';
     }
 
@@ -208,8 +216,12 @@ function modifyPoints(type) {
 }
 
 function backToAdminMain() {
-    document.getElementById('stageControlBox').style.display = 'none';
-    document.getElementById('adminMainPanel').style.display = 'block';
+    let stageBox = document.getElementById('stageControlBox');
+    if (stageBox) stageBox.style.display = 'none';
+
+    let adminPanel = document.getElementById('adminMainPanel');
+    if (adminPanel) adminPanel.style.display = 'block';
+
     let topLogoutBtn = document.getElementById('topLogoutBtn');
     if (topLogoutBtn) topLogoutBtn.style.display = 'block';
 }
@@ -291,7 +303,8 @@ function openContentsModal() {
         });
     }
 
-    document.getElementById('contentsModal').style.display = 'flex';
+    let contentsModal = document.getElementById('contentsModal');
+    if (contentsModal) contentsModal.style.display = 'flex';
 }
 
 function closeContentsModal() {
