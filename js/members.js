@@ -1,50 +1,45 @@
 function openStageControl(stageName) {
     currentActiveStage = stageName;
     
+    // إخفاء لوحة الليدر الرئيسية
     let adminPanel = document.getElementById('adminMainPanel');
     if (adminPanel) adminPanel.style.display = 'none';
 
+    // إظهار لوحة تحكم القطاع
     let stageBox = document.getElementById('stageControlBox');
     if (stageBox) stageBox.style.display = 'block';
 
+    // تحديث عنوان القطاع
     let stageTitle = document.getElementById('stageTitle');
     if (stageTitle) stageTitle.innerText = "لوحة تحكم قطاع: " + stageName;
     
-    hideAllAdminSections();
-    
-    let leaderboard = document.getElementById('leaderboardSection');
-    if (leaderboard) leaderboard.style.display = 'none';
+    // إظهار الأزرار الرئيسية للقطاع وإخفاء الأقسام الفرعية
+    let mainBtns = document.getElementById('stageMainButtons');
+    if (mainBtns) mainBtns.style.display = 'flex';
 
+    ['addMemberSec', 'addQuizSec', 'addPointsSec', 'membersListSec'].forEach(id => {
+        let el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+
+    // التحكم في زر الرجوع
     let backBtn = document.getElementById('backBtn');
     let topLogoutBtn = document.getElementById('topLogoutBtn');
 
     if (isSuperAdmin) {
         if (backBtn) backBtn.style.display = 'inline-block';
-        if (topLogoutBtn) topLogoutBtn.style.display = 'block';
     } else {
         if (backBtn) backBtn.style.display = 'none';
-        if (topLogoutBtn) topLogoutBtn.style.display = 'block';
     }
+    if (topLogoutBtn) topLogoutBtn.style.display = 'block';
 
     populateScoutSelectByStage(stageName);
     renderMembersList(stageName);
 }
 
 function showAdminSection(secName) {
-    const stageControlBox = document.getElementById('stageControlBox');
-    if (!stageControlBox) return;
-
     const mainBtns = document.getElementById('stageMainButtons');
     if (mainBtns) mainBtns.style.display = 'none';
-
-    const footerBtns = document.getElementById('stageFooterButtons');
-    if (footerBtns) footerBtns.style.display = 'none';
-
-    const leaderboard = document.getElementById('leaderboardSection');
-    if (leaderboard) leaderboard.style.display = 'none';
-
-    const topLogout = document.getElementById('topLogoutBtn');
-    if (topLogout) topLogout.style.display = 'block';
 
     ['addMemberSec', 'addQuizSec', 'addPointsSec', 'membersListSec'].forEach(id => {
         let el = document.getElementById(id);
@@ -52,29 +47,19 @@ function showAdminSection(secName) {
     });
 
     if (secName === 'membersList') {
-        stageControlBox.classList.add('large-box');
         renderMembersList(currentActiveStage);
         let memSec = document.getElementById('membersListSec');
         if (memSec) memSec.style.display = 'block';
-    } else {
-        stageControlBox.classList.remove('large-box');
-        if (secName === 'addMember') {
-            let el = document.getElementById('addMemberSec');
-            if (el) el.style.display = 'block';
-        }
-        if (secName === 'addPoints') {
-            let el = document.getElementById('addPointsSec');
-            if (el) el.style.display = 'block';
-        }
+    } else if (secName === 'addMember') {
+        let el = document.getElementById('addMemberSec');
+        if (el) el.style.display = 'block';
+    } else if (secName === 'addPoints') {
+        let el = document.getElementById('addPointsSec');
+        if (el) el.style.display = 'block';
     }
 }
 
 function hideAllAdminSections() {
-    const stageControlBox = document.getElementById('stageControlBox');
-    if (stageControlBox) {
-        stageControlBox.classList.remove('large-box');
-    }
-
     ['addMemberSec', 'addQuizSec', 'addPointsSec', 'membersListSec'].forEach(id => {
         let el = document.getElementById(id);
         if (el) el.style.display = 'none';
@@ -82,22 +67,18 @@ function hideAllAdminSections() {
     
     let mainBtns = document.getElementById('stageMainButtons');
     if (mainBtns) mainBtns.style.display = 'flex';
-
-    let footerBtns = document.getElementById('stageFooterButtons');
-    if (footerBtns) footerBtns.style.display = 'block';
-
-    let leaderboard = document.getElementById('leaderboardSection');
-    if (leaderboard) leaderboard.style.display = 'none';
-
-    let topLogout = document.getElementById('topLogoutBtn');
-    if (topLogout) topLogout.style.display = 'block';
 }
 
 function addNewScout() {
-    let name = document.getElementById('newScoutName').value.trim();
-    let phone = document.getElementById('newScoutPhone').value.trim();
-    let confessor = document.getElementById('newScoutConfessor').value.trim();
-    let code = document.getElementById('newScoutCode').value.trim().toUpperCase();
+    let nameInput = document.getElementById('newScoutName');
+    let phoneInput = document.getElementById('newScoutPhone');
+    let confessorInput = document.getElementById('newScoutConfessor');
+    let codeInput = document.getElementById('newScoutCode');
+
+    let name = nameInput ? nameInput.value.trim() : "";
+    let phone = phoneInput ? phoneInput.value.trim() : "";
+    let confessor = confessorInput ? confessorInput.value.trim() : "";
+    let code = codeInput ? codeInput.value.trim().toUpperCase() : "";
 
     if (name === "" || phone === "" || confessor === "" || code === "") {
         alert("⚠️ يرجى إدخال جميع البيانات!");
@@ -123,24 +104,14 @@ function addNewScout() {
     saveData();
     alert(`✅ تم إضافة الكشاف "${name}" بنجاح!`);
     
-    document.getElementById('newScoutName').value = "";
-    document.getElementById('newScoutPhone').value = "";
-    document.getElementById('newScoutConfessor').value = "";
-    document.getElementById('newScoutCode').value = "";
+    if (nameInput) nameInput.value = "";
+    if (phoneInput) phoneInput.value = "";
+    if (confessorInput) confessorInput.value = "";
+    if (codeInput) codeInput.value = "";
     
     populateScoutSelectByStage(currentActiveStage);
     renderMembersList(currentActiveStage);
-}
-
-function deleteScout(indexInMainArray) {
-    let scout = scoutsData[indexInMainArray];
-    if (confirm(`هل أنت متأكد من حذف الكشاف "${scout.name}"؟`)) {
-        scoutsData.splice(indexInMainArray, 1);
-        saveData();
-        populateScoutSelectByStage(currentActiveStage);
-        renderMembersList(currentActiveStage);
-        alert("🗑️ تم الحذف بنجاح!");
-    }
+    hideAllAdminSections();
 }
 
 function renderMembersList(stageName) {
@@ -149,7 +120,7 @@ function renderMembersList(stageName) {
     tbody.innerHTML = "";
 
     let count = 0;
-    scoutsData.forEach((scout, index) => {
+    scoutsData.forEach((scout) => {
         if (scout.stage === stageName) {
             count++;
             let row = `<tr>
@@ -191,8 +162,12 @@ function populateScoutSelectByStage(stageName) {
 }
 
 function modifyPoints(type) {
-    let selectedIndex = document.getElementById('scoutSelect').value;
-    let pointsInput = parseInt(document.getElementById('addPointsInput').value);
+    let selectEl = document.getElementById('scoutSelect');
+    let pointsEl = document.getElementById('addPointsInput');
+    if (!selectEl || !pointsEl) return;
+
+    let selectedIndex = selectEl.value;
+    let pointsInput = parseInt(pointsEl.value);
 
     if (selectedIndex === "" || isNaN(selectedIndex)) {
         alert("لا يوجد كشاف محدد!");
@@ -212,7 +187,9 @@ function modifyPoints(type) {
     }
 
     saveData();
-    document.getElementById('addPointsInput').value = "";
+    alert("✅ تم تعديل النقاط بنجاح!");
+    pointsEl.value = "";
+    hideAllAdminSections();
 }
 
 function backToAdminMain() {
@@ -233,81 +210,4 @@ function viewScoutActivity(scoutCode) {
     } else {
         alert(`لم يتم تسجيل أي نشاط سابق لهذا الكشاف حتى الآن.`);
     }
-}
-
-// ================= دوال النشر والتنزيل المستقلة =================
-
-function openPublishModal() {
-    let modal = document.getElementById('publishModal');
-    if (modal) modal.style.display = 'flex';
-}
-
-function closePublishModal() {
-    let modal = document.getElementById('publishModal');
-    if (modal) modal.style.display = 'none';
-}
-
-function publishNewContent() {
-    let titleElement = document.getElementById('contentTitle');
-    let urlElement = document.getElementById('contentUrl');
-    let targetElement = document.getElementById('contentTarget');
-
-    if (!titleElement || !urlElement || !targetElement) return;
-
-    let title = titleElement.value.trim();
-    let url = urlElement.value.trim();
-    let target = targetElement.value;
-
-    if (!title || !url) {
-        alert("⚠️ يرجى إدخال عنوان المحتوى ورابط الملف/الصورة!");
-        return;
-    }
-
-    let mediaContents = JSON.parse(localStorage.getItem('mediaContents')) || [];
-    mediaContents.push({
-        id: Date.now(),
-        title: title,
-        url: url,
-        targetStage: target
-    });
-
-    localStorage.setItem('mediaContents', JSON.stringify(mediaContents));
-    alert("✅ تم نشر المحتوى بنجاح!");
-    titleElement.value = "";
-    urlElement.value = "";
-    closePublishModal();
-}
-
-function openContentsModal() {
-    const listContainer = document.getElementById('contentsList');
-    if (!listContainer) return;
-    listContainer.innerHTML = "";
-
-    let mediaContents = JSON.parse(localStorage.getItem('mediaContents')) || [];
-    let userStage = loggedInScout ? loggedInScout.stage : "";
-    let availableFiles = mediaContents.filter(item => item.targetStage === "ALL" || item.targetStage === userStage);
-
-    if (availableFiles.length === 0) {
-        listContainer.innerHTML = "<p style='text-align:center;'>لا توجد ملفات أو صور متاحة للتنزيل حالياً.</p>";
-    } else {
-        availableFiles.forEach(file => {
-            let itemHtml = `
-                <div style="background:#222; padding:15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
-                    <span>📄 ${file.title}</span>
-                    <a href="${file.url}" download target="_blank" style="background:#2196F3; color:white; padding:8px 15px; text-decoration:none; border-radius:5px; font-weight:bold;">
-                        ⬇️ تنزيل
-                    </a>
-                </div>
-            `;
-            listContainer.innerHTML += itemHtml;
-        });
-    }
-
-    let contentsModal = document.getElementById('contentsModal');
-    if (contentsModal) contentsModal.style.display = 'flex';
-}
-
-function closeContentsModal() {
-    let modal = document.getElementById('contentsModal');
-    if (modal) modal.style.display = 'none';
 }
