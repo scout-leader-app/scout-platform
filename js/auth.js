@@ -67,10 +67,9 @@ function login() {
     );
 
     if (foundScout) {
-        // تسجيل وتحديث وقت آخر نشاط للكشاف
         let now = new Date();
         foundScout.lastActive = now.toLocaleDateString('ar-EG') + ' - ' + now.toLocaleTimeString('ar-EG');
-        saveData(); // حفظ التعديل في التخزين المحلي
+        saveData();
 
         loggedInScout = foundScout;
         document.getElementById('loginBox').style.display = 'none';
