@@ -38,9 +38,12 @@ function login() {
 
     if (inputCode === SUPER_ADMIN_CODE) {
         isSuperAdmin = true;
-        document.getElementById('loginBox').style.display = 'none';
-        document.getElementById('adminMainPanel').style.display = 'block';
-        document.getElementById('topLogoutBtn').style.display = 'block';
+        let loginBox = document.getElementById('loginBox');
+        let adminPanel = document.getElementById('adminMainPanel');
+        let topLogout = document.getElementById('topLogoutBtn');
+        if (loginBox) loginBox.style.display = 'none';
+        if (adminPanel) adminPanel.style.display = 'block';
+        if (topLogout) topLogout.style.display = 'block';
         errorMsg.innerHTML = "";
         return;
     }
@@ -48,9 +51,11 @@ function login() {
     if (STAGE_CODES[inputCode]) {
         isSuperAdmin = false;
         let targetStage = STAGE_CODES[inputCode];
-        document.getElementById('loginBox').style.display = 'none';
+        let loginBox = document.getElementById('loginBox');
+        let topLogout = document.getElementById('topLogoutBtn');
+        if (loginBox) loginBox.style.display = 'none';
         openStageControl(targetStage);
-        document.getElementById('topLogoutBtn').style.display = 'block';
+        if (topLogout) topLogout.style.display = 'block';
         errorMsg.innerHTML = "";
         return;
     }
@@ -72,13 +77,23 @@ function login() {
         saveData();
 
         loggedInScout = foundScout;
-        document.getElementById('loginBox').style.display = 'none';
-        document.getElementById('displayName').innerText = foundScout.name;
-        document.getElementById('displayStage').innerText = foundScout.stage;
-        document.getElementById('displayPoints').innerText = foundScout.points;
-        document.getElementById('profileDashboard').style.display = 'block';
-        document.getElementById('topLogoutBtn').style.display = 'block';
-        backToScoutMenu();
+        let loginBox = document.getElementById('loginBox');
+        let displayName = document.getElementById('displayName');
+        let displayStage = document.getElementById('displayStage');
+        let displayPoints = document.getElementById('displayPoints');
+        let profileDashboard = document.getElementById('profileDashboard');
+        let topLogout = document.getElementById('topLogoutBtn');
+
+        if (loginBox) loginBox.style.display = 'none';
+        if (displayName) displayName.innerText = foundScout.name;
+        if (displayStage) displayStage.innerText = foundScout.stage;
+        if (displayPoints) displayPoints.innerText = foundScout.points;
+        if (profileDashboard) profileDashboard.style.display = 'block';
+        if (topLogout) topLogout.style.display = 'block';
+        
+        if (typeof backToScoutMenu === 'function') {
+            backToScoutMenu();
+        }
         errorMsg.innerHTML = "";
     } else {
         errorMsg.innerHTML = "❌ البيانات غير صحيحة!";
@@ -86,11 +101,13 @@ function login() {
 }
 
 function showLogoutModal() {
-    document.getElementById('logoutModal').style.display = 'flex';
+    let modal = document.getElementById('logoutModal');
+    if (modal) modal.style.display = 'flex';
 }
 
 function closeLogoutModal() {
-    document.getElementById('logoutModal').style.display = 'none';
+    let modal = document.getElementById('logoutModal');
+    if (modal) modal.style.display = 'none';
 }
 
 function confirmLogout() {
@@ -98,7 +115,6 @@ function confirmLogout() {
     loggedInScout = null;
     isSuperAdmin = false;
 
-    // إخفاء جميع اللوحات والنوافذ بأمان تام منعا لأي أخطاء
     let elementsToHide = [
         'profileDashboard', 
         'adminMainPanel', 
@@ -113,7 +129,6 @@ function confirmLogout() {
         if (el) el.style.display = 'none';
     });
 
-    // إظهار شاشة تسجيل الدخول وتفريغ الحقول بأمان
     let loginBox = document.getElementById('loginBox');
     if (loginBox) loginBox.style.display = 'block';
 
@@ -125,4 +140,46 @@ function confirmLogout() {
 
     let scoutCodeInput = document.getElementById('scoutCode');
     if (scoutCodeInput) scoutCodeInput.value = "";
+}
+
+// دالة فتح نافذة النشر للمشرف (مضمونة هنا لمنع أي خطأ)
+function openPublishModal() {
+    let modal = document.getElementById('publishModal');
+    if (modal) modal.style.display = 'flex';
+}
+
+function closePublishModal() {
+    let modal = document.getElementById('publishModal');
+    if (modal) modal.style.display = 'none';
+}
+
+function publishNewContent() {
+    let titleElement = document.getElementById('contentTitle');
+    let urlElement = document.getElementById('contentUrl');
+    let targetElement = document.getElementById('contentTarget');
+
+    if (!titleElement || !urlElement || !targetElement) return;
+
+    let title = titleElement.value.trim();
+    let url = urlElement.value.trim();
+    let target = targetElement.value;
+
+    if (!title || !url) {
+        alert("⚠️ يرجى إدخال عنوان المحتوى ورابط الملف/الصورة!");
+        return;
+    }
+
+    let mediaContents = JSON.parse(localStorage.getItem('mediaContents')) || [];
+    mediaContents.push({
+        id: Date.now(),
+        title: title,
+        url: url,
+        targetStage: target
+    });
+
+    localStorage.setItem('mediaContents', JSON.stringify(mediaContents));
+    alert("✅ تم نشر المحتوى بنجاح!");
+    titleElement.value = "";
+    urlElement.value = "";
+    closePublishModal();
 }
