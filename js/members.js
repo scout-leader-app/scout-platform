@@ -333,3 +333,66 @@ function viewScoutActivity(scoutCode) {
         alert(`لم يتم تسجيل أي نشاط سابق لهذا الكشاف حتى الآن.`);
     }
 }
+
+// مصفوفة حفظ الملفات والمحتويات المتاحة للتنزيل
+let mediaContents = JSON.parse(localStorage.getItem('mediaContents')) || [];
+
+function saveMediaContents() {
+    localStorage.setItem('mediaContents', JSON.stringify(mediaContents));
+}
+
+// دالة المشرف لنشر محتوى جديد
+function publishNewContent() {
+    let title = document.getElementById('contentTitle').value.trim();
+    let url = document.getElementById('contentUrl').value.trim();
+    let target = document.getElementById('contentTarget').value; // "ALL" أو اسم القطاع الحالي
+
+    if (!title || !url) {
+        alert("⚠️ يرجى إدخال عنوان المحتوى ورابط الملف/الصورة!");
+        return;
+    }
+
+    mediaContents.push({
+        id: Date.now(),
+        title: title,
+        url: url,
+        targetStage: target // "ALL" تعني لكل القطاعات
+    });
+
+    saveMediaContents();
+    alert("✅ تم نشر المحتوى بنجاح!");
+    document.getElementById('contentTitle').value = "";
+    document.getElementById('contentUrl').value = "";
+}
+
+// دالة الكشاف لفتح قائمة المحتويات والملفات
+function openContentsModal() {
+    const listContainer = document.getElementById('contentsList');
+    listContainer.innerHTML = "";
+
+    // فلترة الملفات الخاصة بقطاع الكشاف الحالي + الملفات الموجهة لكل القطاعات
+    let userStage = loggedInScout ? loggedInScout.stage : "";
+    let availableFiles = mediaContents.filter(item => item.targetStage === "ALL" || item.targetStage === userStage);
+
+    if (availableFiles.length === 0) {
+        listContainer.innerHTML = "<p style='text-align:center;'>لا توجد ملفات أو صور متاحة للتنزيل حالياً.</p>";
+    } else {
+        availableFiles.forEach(file => {
+            let itemHtml = `
+                <div style="background:#222; padding:15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>📄 ${file.title}</span>
+                    <a href="${file.url}" download target="_blank" style="background:#2196F3; color:white; padding:8px 15px; text-decoration:none; border-radius:5px; font-weight:bold;">
+                        ⬇️ تنزيل
+                    </a>
+                </div>
+            `;
+            listContainer.innerHTML += itemHtml;
+        });
+    }
+
+    document.getElementById('contentsModal').style.display = 'flex';
+}
+
+function closeContentsModal() {
+    document.getElementById('contentsModal').style.display = 'none';
+}
