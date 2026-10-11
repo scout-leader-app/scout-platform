@@ -55,6 +55,9 @@
             <button onclick="showScoutSection('points')" class="btn-primary btn-full">📊 معرفة النقاط</button>
             <button onclick="openQuizMenu()" class="btn-primary btn-blue btn-full">🧩 المسابقات</button>
         </div>
+        <!-- زر تنزيل المحتويات للكشاف -->
+            <button onclick="openContentsModal()" class="btn-primary" style="background:#1b5e20; width: 100%;">📥 تنزيل المحتويات والملفات</button>
+        </div>
 
         <div id="scoutPointsSection" class="sub-panel" style="display: none; background-color: #e8f5e9;">
             <h3 style="margin: 0; color: #1b5e20;">رصيد نقاطك الحالي:</h3>
@@ -79,7 +82,9 @@
         <button onclick="toggleGlobalQuizForm()" class="btn-primary btn-purple btn-full" style="margin-bottom: 10px;">➕ إضافة مسابقة عامة</button>
         
         <button onclick="showQuizTrackingPanel()" class="btn-primary btn-full" style="background-color: #0288d1; margin-bottom: 15px;">📊 متابعة حلول المسابقات</button>
-
+        <!-- زر نشر المحتويات للمشرف العام -->
+        <button onclick="openPublishModal()" class="btn-primary" style="background:#2e7d32; width: 100%; margin-bottom: 15px;">📢 نشر صور ومحتويات للتنزيل</button>
+        
         <p>اختر لوحة التحكم الخاصة بالقطاع:</p>
 
         <div style="display: flex; flex-direction: column; gap: 10px;">
