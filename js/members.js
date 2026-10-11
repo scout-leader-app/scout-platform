@@ -320,3 +320,19 @@ function enableBottomDeleteMode() {
         alert("⚠️ يرجى اختيار كشاف أولاً من القائمة لحذفه!");
     }
 }
+
+// 1. إضافة الزر بجانب بيانات كل عضو في الجدول أو القائمة:
+// ضع هذا السطر داخل حلقة التكرار (renderMembers / loop) بجانب اسم الكشاف:
+`<button onclick="viewScoutActivity('${member.id}')" class="btn-activity">سجل النشاط</button>`
+
+// 2. إضافة دالة عرض التوقيت والتاريخ عند ضغط المشرف:
+function viewScoutActivity(scoutId) {
+    let members = JSON.parse(localStorage.getItem('scout_members')) || [];
+    let scout = members.find(m => m.id === scoutId);
+    
+    if (scout && scout.lastActive) {
+        alert(`الكشاف: ${scout.name}\nآخر فترة عمل: ${scout.lastActive}`);
+    } else {
+        alert(`لم يتم تسجيل أي نشاط سابق لهذا الكشاف حتى الآن.`);
+    }
+}
