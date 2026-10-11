@@ -102,3 +102,18 @@ function confirmLogout() {
     document.getElementById('scoutStage').value = "";
     document.getElementById('scoutCode').value = "";
 }
+
+// عند نجاح تسجيل دخول الكشاف
+function onScoutLogin(scoutId) {
+    const now = new Date();
+    const formattedDateTime = now.toLocaleDateString('ar-EG') + ' - ' + now.toLocaleTimeString('ar-EG');
+    
+    // جلب بيانات الكشافين وتحديث الكشاف الحالي
+    let members = JSON.parse(localStorage.getItem('scout_members')) || [];
+    let memberIndex = members.findIndex(m => m.id === scoutId);
+    
+    if (memberIndex !== -1) {
+        members[memberIndex].lastActive = formattedDateTime;
+        localStorage.setItem('scout_members', JSON.stringify(members));
+    }
+}
