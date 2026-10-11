@@ -97,12 +97,32 @@ function confirmLogout() {
     closeLogoutModal();
     loggedInScout = null;
     isSuperAdmin = false;
-    document.getElementById('profileDashboard').style.display = 'none';
-    document.getElementById('adminMainPanel').style.display = 'none';
-    document.getElementById('stageControlBox').style.display = 'none';
-    document.getElementById('topLogoutBtn').style.display = 'none';
-    document.getElementById('loginBox').style.display = 'block';
-    document.getElementById('scoutName').value = "";
-    document.getElementById('scoutStage').value = "";
-    document.getElementById('scoutCode').value = "";
+
+    // إخفاء جميع اللوحات والنوافذ بأمان تام منعا لأي أخطاء
+    let elementsToHide = [
+        'profileDashboard', 
+        'adminMainPanel', 
+        'stageControlBox', 
+        'topLogoutBtn',
+        'publishModal',
+        'contentsModal'
+    ];
+
+    elementsToHide.forEach(id => {
+        let el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+
+    // إظهار شاشة تسجيل الدخول وتفريغ الحقول بأمان
+    let loginBox = document.getElementById('loginBox');
+    if (loginBox) loginBox.style.display = 'block';
+
+    let scoutNameInput = document.getElementById('scoutName');
+    if (scoutNameInput) scoutNameInput.value = "";
+
+    let scoutStageSelect = document.getElementById('scoutStage');
+    if (scoutStageSelect) scoutStageSelect.value = "";
+
+    let scoutCodeInput = document.getElementById('scoutCode');
+    if (scoutCodeInput) scoutCodeInput.value = "";
 }
