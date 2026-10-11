@@ -305,6 +305,25 @@
         <!-- سيتم تعبئة الملفات هنا تلقائياً -->
     </div>
 </div>
+
+    <!-- يوضع داخل لوحة تحكم المشرف -->
+<div class="admin-card" style="margin:20px 0; padding:15px; border:1px solid #ccc; border-radius:8px;">
+    <h3>📢 نشر صور ومحتويات للتنزيل</h3>
+    <input type="text" id="contentTitle" placeholder="اسم الملف أو الصورة (مثال: جدول الرحلة)" style="width:100%; margin-bottom:10px; padding:8px;">
+    <input type="text" id="contentUrl" placeholder="رابط الصورة أو الملف (images/photo.jpg)" style="width:100%; margin-bottom:10px; padding:8px;">
+    
+    <select id="contentTarget" style="width:100%; margin-bottom:10px; padding:8px;">
+        <option value="ALL">🌐 نشر لكل القطاعات</option>
+        <option value="ابتدائي">قطاع ابتدائي فقط</option>
+        <option value="إعدادي">قطاع إعدادي فقط</option>
+        <option value="ثانوي">قطاع ثانوي فقط</option>
+        <option value="جامعي">قطاع جامعي فقط</option>
+    </select>
+
+    <button onclick="publishNewContent()" style="background:#2e7d32; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">
+        🚀 نشر المحتوى
+    </button>
+</div>
     
     <script src="js/auth.js" defer></script>
     <script src="js/quizzes.js" defer></script>
